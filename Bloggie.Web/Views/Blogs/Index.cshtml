@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Horroras.Web.Models.ViewModels.BlogDetailsViewModel
+@inject SignInManager<IdentityUser> signInManager
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            @if (Model != null)
+            {
+                <h1 class="mb-3">@Model.Heading</h1>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary">@Model.Author</span>
+                    <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+                </div>
+
+
+                <div class="mb-3" style="color: crimson">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <a id="likeButton" href="#" data-blogpost-id="@Model.Id">
+                            <i class="bi bi-heart me-3"></i>
+                        </a>
+                        <span id="likeCount">@Model.TotalLikes</span> <span>likes</span>
+                    }
+                </div>
+
+                <div>
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge bg-primary mb-3">@tag.Name</span>
+                    }
+                </div>
+                <img src="@Model.FeaturedImageUrl" class="d-block img-fluid mb-3" />
+
+                <div class="mb-3 blog-details-content">
+                    @Html.Raw(Model.Content)
+                </div>
+            }
+            else
+            {
+                <p>Blog post not found!</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#likeButton').click(function (event) {
+                event.preventDefault();
+                var blogPostId = $(this).data('blogpost-id');
+                $.ajax({
+                    url: '@Url.Action("LikePost", "Blogs")',
+                    type: 'POST',
+                    data: { blogPostId: blogPostId },
+                    success: function (data) {
+                        $('#likeCount').text(data.totalLikes);
+                    },
+                    error: function () {
+                        alert('Error liking the post.');
+                    }
+                });
+            });
+        });
+    </script>
+}

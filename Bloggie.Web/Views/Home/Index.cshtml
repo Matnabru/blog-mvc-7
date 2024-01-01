@@ -1,0 +1,97 @@
+﻿@model Horroras.Web.Models.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-5 py-5">
+        <div class="col-12 col-lg-6">
+            <h1 class="display-5 fw-bold mb-3">Blogas o wszystkim i niczym</h1>
+            <p>Czasami warto coś napisać ...</p>
+        </div>
+        <div class="col-12 col-lg-6">
+            <img class="d-block mx-lg-auto img-fluid" width="300" src="https://i.pinimg.com/550x/1f/f2/ab/1ff2abcba5c05ef0db5f1599f5f14877.jpg" />
+        </div>
+    </div>
+</div>
+
+@* Search Form *@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <form asp-controller="Home" asp-action="Index" method="get" class="form-inline">
+                <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control mr-sm-2" placeholder="Search by title..." />
+                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* Tags Display *@
+<div class="container mb-3">
+    <div class="row justify-content-center">
+        <div class="col-6 d-flex justify-content-center">
+            @if (Model != null && Model.Tags.Any())
+            {
+                foreach (var tag in Model.Tags)
+                {
+                    <span class="badge bg-dark me-1">@tag.Name</span>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@* Blog Posts Display *@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            @if (Model != null && Model.BlogPosts.Any())
+            {
+                foreach (var blogPost in Model.BlogPosts)
+                {
+                    <div class="mb-5 bg-light box-shadow">
+                        <img src="@blogPost.FeaturedImageUrl" alt="@blogPost.Heading" class="mb-2 d-block img-fluid" />
+                        <h2 class="mb-4">@blogPost.Heading</h2>
+                        <p>Author: @blogPost.Author<br />Published Date: @blogPost.PublishedDate.ToShortDateString();</p>
+                        <p class="mb-4">
+                            @foreach (var tag in blogPost.Tags)
+                            {
+                                <span class="badge bg-primary me-1">@tag.Name</span>
+                            }
+                        </p>
+                        <p class="mb-5">@blogPost.ShortDescription</p>
+                        <a class="btn btn-dark" asp-controller="Blogs" asp-action="Index" asp-route-urlHandle="@blogPost.UrlHandle">Read More</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@* Pagination Controls *@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(Model.CurrentPage - 1)&searchQuery=@Model.SearchQuery">Previous</a>
+                        </li>
+                        @for (var i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="?page=@i&searchQuery=@Model.SearchQuery">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(Model.CurrentPage + 1)&searchQuery=@Model.SearchQuery">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
