@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Horroras.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd7da10d6f1490aa89d493044cf364ace1ff1ba3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Horroras.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Horroras.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
